@@ -63,12 +63,18 @@ var demo = new Vue({
     removeOne: function( product ) {
       product.quantity--;
       if ( product.quantity <= 0 ) {
-          this.shopping_cart.$remove( product );
+        var index = this.shopping_cart.indexOf( product )
+        if (index > -1) {
+          this.shopping_cart.splice(index, 1);
+        };
       }
     },
     removeFromCart: function( product ) {
       product.quantity--;
-      this.shopping_cart.$remove( product );
+      var index = this.shopping_cart.indexOf( product )
+      if (index > -1) {
+        this.shopping_cart.splice(index, 1);
+      };
     }
   },
   computed: {
