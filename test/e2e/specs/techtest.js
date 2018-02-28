@@ -49,5 +49,11 @@ module.exports = {
     browser
     .click('#removeOne')
     .assert.containsText('.list-unstyled', '01 Item')
+
+    // tests that you can add a donation
+    browser
+    .click('select[id=donation]')
+    .click('option[value="10"]')
+    .assert.containsText('.list-unstyled', '$189.10')
   }
 }
