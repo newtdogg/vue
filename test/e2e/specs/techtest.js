@@ -35,8 +35,14 @@ module.exports = {
       browser.expect.element('#app').text.to.not.contain('Camera');
       browser.expect.element('#app').text.to.not.contain('USB Stick');
 
+    // tests the add to cart button works
     browser
     .click('#addToCart')
     .assert.containsText('.list-unstyled', 'Small Phone Nokia Phone ($199.00)')
+
+    // tests to increase the number of a specific item
+    browser
+    .click('#addOne')
+    .assert.containsText('.list-unstyled', '02 Items')
   }
 }

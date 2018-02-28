@@ -57,7 +57,7 @@
               <div class="col-xs-9">
                 <button class="btn btn-xs btn-default" @click="removeOne( item )" type="button" title="Remove One"><i class="fa fa-minus"></i></button>
                 <small>{{ item.quantity | zeropad }}</small>
-                <button class="btn btn-xs btn-default" @click="addOne( item )" type="button" title="Add One"><i class="fa fa-plus"></i></button>
+                <button id="addOne" class="btn btn-xs btn-default" @click="addOne( item )" type="button" title="Add One"><i class="fa fa-plus"></i></button>
                 <small>{{ item.listitem }} ({{ item.price | tocurrency }})</small>
               </div>
               <div class="col-xs-3 text-right">
