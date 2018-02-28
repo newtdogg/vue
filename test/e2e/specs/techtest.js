@@ -5,11 +5,13 @@ module.exports = {
       .waitForElementVisible('#app', 1000)
       .assert.visible('#app')
 
+    // tests search form works for the camera
     .setValue('.form-control', 'camera')
       browser.expect.element('#app').text.to.not.contain('USB Stick');
       browser.expect.element('#app').text.to.not.contain('USB Plug');
       browser.expect.element('#app').text.to.not.contain('Small Phone');
 
+    // tests search form works for the USB Plug
     browser
     .clearValue('.form-control')
     .setValue('.form-control', 'USB Plug')
@@ -17,6 +19,7 @@ module.exports = {
       browser.expect.element('#app').text.to.not.contain('Camera');
       browser.expect.element('#app').text.to.not.contain('Small Phone');
 
+    // tests search form works for the USB Stick
     browser
     .clearValue('.form-control')
     .setValue('.form-control', 'USB Stick')
@@ -24,11 +27,16 @@ module.exports = {
       browser.expect.element('#app').text.to.not.contain('Camera');
       browser.expect.element('#app').text.to.not.contain('Small Phone');
 
+    // tests search form works for the phone
     browser
     .clearValue('.form-control')
     .setValue('.form-control', 'Small Phone')
       browser.expect.element('#app').text.to.not.contain('USB Plug');
       browser.expect.element('#app').text.to.not.contain('Camera');
       browser.expect.element('#app').text.to.not.contain('USB Stick');
+
+    browser
+    .click('#addToCart')
+    .assert.containsText('.list-unstyled', 'Small Phone Nokia Phone ($199.00)')
   }
 }
