@@ -67,6 +67,7 @@ var demo = new Vue({
       }
     },
     removeFromCart: function( product ) {
+      product.quantity--;
       this.shopping_cart.$remove( product );
     }
   },
