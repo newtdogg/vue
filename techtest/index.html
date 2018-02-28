@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="Simple Vue.js shopping cart demo">
+    <meta name="author" content="Mike Sprague">
+    <title>Simple Vue.js shopping cart demo | &lt;/&gt; by Mike Sprague</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootswatch/3.3.7/sandstone/bootstrap.min.css" rel="stylesheet" integrity="sha384-G3G7OsJCbOk1USkOY4RfeX1z27YaWrZ1YuaQ5tbuawed9IoreRDpWpTkZLXQfPm3" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" integrity="sha256-eZrrJcwDc/3uDhsdt61sL2oOBY362qM3lon1gyExkL0=" crossorigin="anonymous" />
+    <link rel="stylesheet" href="https://vuejs.mikesprague.me/shared/css/styles.css">
+    <link rel="stylesheet" href="main.css">
+    <!--[if lt IE 9]>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/html5shiv/3.7.3/html5shiv.min.js" integrity="sha256-3Jy/GbSLrg0o9y5Z5n1uw0qxZECH7C6OQpVBgNFYa0g=" crossorigin="anonymous"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/respond.js/1.4.2/respond.min.js" integrity="sha256-g6iAfvZp+nDQ2TdTR/VVKJf3bGro4ub5fvWSWVRi2NE=" crossorigin="anonymous"></script>
+    <![endif]-->
+  </head>
+  <body>
+    <div class="container" id="app">
+      <div class="row">
+        <div class="col-sm-6">
+          <div class="row">
+            <div class="input-group product-search">
+              <input class="form-control" placeholder="Search products..." type="text" v-model="search">
+              <div class="input-group-btn">
+                <button class="btn btn-default" type="button" @click="sortProducts( 'name' )"><i class="fa fa-unsorted"></i> Sort By Name</button>
+              </div>
+            </div>
+          </div>
+          <div class="row">
+            <div class="col-sm-12" v-for="item in filteredProducts">
+              <h3>{{ item.name | titlecase }}</h3>
+                <li v-for="option in item.options">
+                  <strong>{{ option.details | titlecase }}</strong> {{ option.price | tocurrency }}
+                  <button class="btn btn-default btn-xs" type="button" @click="addToCart( item, option )" title="Add to Cart">Add to <i class="fa fa-cart-plus"></i></button>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-5 col-sm-offset-1 well">
+          <div class="row">
+            <div class="col-sm-7">
+              <h2><i class="fa fa-shopping-cart"></i> Shopping Cart</h2>
+            </div>
+            <div class="col-sm-5">
+              <p class="text-discount text-right">
+                <em v-if="total > 100"><strong>10% Off<br>You saved {{ discount | tocurrency }}</strong></em>
+                <em v-else>Spend over $100 and automatically get 10% off</em>
+              </p>
+            </div>
+          </div>
+          <hr>
+          <ul class="list-unstyled">
+            <li class="row" v-for="item in shopping_cart">
+              <div class="col-xs-9">
+                <button class="btn btn-xs btn-default" @click="removeOne( item )" type="button" title="Remove One"><i class="fa fa-minus"></i></button>
+                <small>{{ item.quantity | zeropad }}</small>
+                <button class="btn btn-xs btn-default" @click="addOne( item )" type="button" title="Add One"><i class="fa fa-plus"></i></button>
+                <small>{{ item.listitem }} ({{ item.price | tocurrency }})</small>
+              </div>
+              <div class="col-xs-3 text-right">
+                <small>{{ item | subvalue | tocurrency }}</small>
+                <button class="btn btn-xs btn-danger btn-delete" @click="removeFromCart( item )" type="button" title="Remove From Cart"><i class="fa fa-times"></i></button>
+              </div>
+            </li>
+            <li class="row total">
+              <div class="col-xs-6 total-count"><strong>{{ count | zeropad }} Item<span v-if="count !== 1">s</span></strong></div>
+              <div class="col-xs-6 text-right total-cost"><strong :class="{ 'text-success' :discount }">{{ ( total - discount ) | tocurrency }}</strong></div>
+            </li>
+            <li class="row" v-if="total > 0">
+              <hr>
+              <div class="col-xs-6 text-right">
+                <small>Would you like to add a donation?</small>
+              </div>
+              <div class="col-xs-6">
+                <div class="input-group input-group-sm">
+                  <span class="input-group-addon"><i class="fa fa-plus"></i></span>
+                  <select class="form-control input-sm" v-model="donation">
+                    <option value="0">$0.00</option>
+                    <option value="1">$1.00</option>
+                    <option value="5">$5.00</option>
+                    <option value="10">$10.00</option>
+                    <option value="15">$15.00</option>
+                    <option value="20">$20.00</option>
+                    <option value="25">$25.00</option>
+                    <option value="50">$50.00</option>
+                    <option value="100">$100.00</option>
+                  </select>
+                </div>
+              </div>
+              <p class="text-center"><small><em>100% of your donation goes to the local SPCA</em></small></p>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <footer class="footer">
+      <footer-content></footer-content>
+    </footer>
+
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.6/vue.js" integrity="sha256-MbKnwYm5PqnQ9xLd0vK2C8vDJZA+PXKuNlmgJc+BG48=" crossorigin="anonymous"></script> -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/2.1.6/vue.min.js" integrity="sha256-WcJDyxpvFLMHHA7kQuvbE5kWgRwV3zukWdjvbTUcXh8=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/accounting.js/0.4.1/accounting.min.js" integrity="sha256-wLefPvftUZaYEQquDfRpnXG8nkR2o9vutAcDLNe64R0=" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.2/lodash.min.js" integrity="sha256-Cv5v4i4SuYvwRYzIONifZjoc99CkwfncROMSWat1cVA=" crossorigin="anonymous"></script>
+    <script src="https://vuejs.mikesprague.me/shared/js/components.js"></script>
+    <script src="data.js"></script>
+    <script src="vue.js"></script>
+  </body>
+</html>
