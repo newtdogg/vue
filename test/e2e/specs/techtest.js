@@ -44,5 +44,10 @@ module.exports = {
     browser
     .click('#addOne')
     .assert.containsText('.list-unstyled', '02 Items')
+
+    // tests to decrease the number of a specific item
+    browser
+    .click('#removeOne')
+    .assert.containsText('.list-unstyled', '01 Item')
   }
 }
